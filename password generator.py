@@ -1,42 +1,33 @@
 import random
+import string
+import pyperclip
 
-# لیست کاراکترها
-letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
-# خوش‌آمدگویی و دریافت ورودی
-print("""  __
- (`/\
- `=\/\ __...--~~~~~-._   _.-~~~~~--...__
-  `=\/\               \ /               \\
-   `=\/                V                 \\
-   //_\___--~~~~~~-._  |  _.-~~~~~~--...__\\
-  //  ) (..----~~~~._\ | /_.~~~~----.....__\\
- ===( INK )==========\\|//====================
-__\___/________samira password____________________________________________\n""")
-print("Welcome to the PyPassword Generator !\n")
-nr_letters = int(input("How many letters would you like in your password?\n"))
-nr_numbers = int(input("How many numbers would you like?\n"))
-nr_symbols = int(input("How many symbols would you like?\n"))
+def get_positive_int(prompt):
+    while True:
+        try:
+            val = int(input(prompt))
+            if val >= 0:
+                return val
+            print("Enter positive number.")
+        except ValueError:
+            print("Enter valid number.")
 
-# انتخاب کاراکترهای تصادفی
-password_list = []
+print("Welcome to PyPassword Generator!\n")
 
-for char in range(0, nr_letters):
-    password_list.append(random.choice(letters))
+nr_letters = get_positive_int("How many letters?\n")
+nr_numbers = get_positive_int("How many numbers?\n")
+nr_symbols = get_positive_int("How many symbols?\n")
 
-for char in range(0, nr_numbers):
-    password_list.append(random.choice(numbers))
+all_chars = (
+    random.choices(string.ascii_letters, k=nr_letters) +
+    random.choices(string.digits, k=nr_numbers) +
+    random.choices('!#$%&()*+-_[]{}:;"\'|/?^`~=', k=nr_symbols)
+)
 
-for char in range(0, nr_symbols):
-    password_list.append(random.choice(symbols))
+random.shuffle(all_chars)
+password = ''.join(all_chars)
 
-# بهم ریختن ترتیب
-random.shuffle(password_list)
-
-# تبدیل به رشته
-password = "".join(password_list)
-
-# نمایش نتیجه
-print(f"Your password is: {password}")
+print(f"\nYour password is: {password}")
+pyperclip.copy(password)
+print("copied in clipboard!")
